@@ -75,13 +75,13 @@ new Vue({
             const willAttack = Math.floor(Math.random() * (100 - 1) + 1)
 
             if (willAttack <= 80) {
-                const damage = Math.floor(Math.random() * (20 - 1) + 1)
                 const critical = Math.floor(Math.random() * (100 - 1) + 1)
+                let damage = Math.floor(Math.random() * (20 - 1) + 1)
                 let logText = ""
 
                 if (critical <= 20) {
                     damage *= 2
-                    text = "The monster critically wounds the player! The player receives " + damage + " damage!"
+                    logText = "The monster critically wounds the player! The player receives " + damage + " damage!"
                 } else {
                     logText = "The player receives " + damage + " damage!"
                 }

@@ -14,3 +14,18 @@
 .start-over {
     margin-bottom: 1.5em;
 }
+
+@media screen and (max-width: 769px) {
+    .mobile-buttons {
+        display: flex;
+        flex-flow: column;
+    }
+
+    .mobile-buttons .button {
+        margin-bottom: 0.5em;
+    }
+
+    .mobile-buttons .button:last-child {
+        margin-bottom: 0;
+    }
+}

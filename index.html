@@ -32,21 +32,25 @@
                 </div>
             </div>
 
-            <div class="box has-text-centered">
-                <button class="button is-large is-danger" @click="attack" :disabled="finished">Attack</button>
-                <button class="button is-large is-warning" @click="spAttack" :disabled="cooldown > 0 || finished">Special Attack (<span v-if="cooldown > 0">{{ cooldown }}</span> <span v-else>ready</span>)</button>
-                <button class="button is-large is-success" @click="heal" :disabled="finished">Heal</button>
-                <button class="button is-large is-outlined" @click="reset" :disabled="finished">Give Up</button>
+            <div class="box mobile-buttons has-text-centered">
+                <template v-if="!finished">
+                    <button class="button is-large is-danger fl-1" @click="attack" :disabled="finished">Attack</button>
+                    <button class="button is-large is-warning fl-3" @click="spAttack" :disabled="cooldown > 0 || finished">Special Attack (<span v-if="cooldown > 0">{{ cooldown }}</span> <span v-else>ready</span>)</button>
+                    <button class="button is-large is-success fl-2" @click="heal" :disabled="finished">Heal</button>
+                    <button class="button is-large is-outlined fl-4" @click="reset" :disabled="finished">Give Up</button>  
+                </template>
+
+                <template v-if="finished">
+                    <p class="subtitle is-small" v-if="won">You defeated the monster!</p>
+                    <p class="subtitle is-small" v-if="lost">The monster proves to be too powerful. It devours your soul and laughs as it walks away.</p>
+                    
+                    <button v-if="finished" class="button start-over is-medium is-outlined" @click="reset">Start over</button>
+                </template>
             </div>
 
             <div class="box has-text-centered">
                 <h2 class="title is-size-5">Battle Log</h2>
                 <p v-if="battleLog.length == 0">There is no battle data yet.</p>
-                
-                <p class="subtitle is-small" v-if="won">You defeated the monster!</p>
-                <p class="subtitle is-small" v-if="lost">The monster proves to be too powerful. It devours your soul and laughs as it walks away.</p>
-                
-                <button v-if="finished" class="button start-over is-medium is-outlined" @click="reset">Start over</button>
                 
                 <ul v-if="battleLog.length > 0">
                     <li v-for="entry in battleLog">
