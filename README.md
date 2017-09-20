@@ -1,5 +1,7 @@
 # The Monster Slayer
 
+[LIVE](https://felipevfa.github.io/vue-monster-slayer/)
+
 The Monster Slayer is a simple Vue application that lets you battle against a monster. 
 
 Each turn, the player takes a simple action against the monster: attacking it normaly, unleashing a special attack against it or healing against damage.
