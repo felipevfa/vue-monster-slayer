@@ -36,7 +36,7 @@
                 <template v-if="!finished">
                     <button class="button is-large is-danger fl-1" @click="attack" :disabled="finished">Attack</button>
                     <button class="button is-large is-warning fl-3" @click="spAttack" :disabled="cooldown > 0 || finished">Special Attack (<span v-if="cooldown > 0">{{ cooldown }}</span> <span v-else>ready</span>)</button>
-                    <button class="button is-large is-success fl-2" @click="heal" :disabled="cooldown > 0 || finished">Heal (<span v-if="healCooldown > 0">{{ healCooldown }}</span> <span v-else>ready</span>)</button>
+                    <button class="button is-large is-success fl-2" @click="heal" :disabled="healCooldown > 0 || finished">Heal (<span v-if="healCooldown > 0">{{ healCooldown }}</span> <span v-else>ready</span>)</button>
                     <button class="button is-large is-outlined fl-4" @click="reset" :disabled="finished">Give Up</button>  
                 </template>
 
