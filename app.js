@@ -73,6 +73,7 @@ new Vue({
         },
         monsterMove: function() {
             if (this.end()) return 
+
             if (this.cooldown > 0) this.cooldown--
             if (this.healCooldown > 0) this.healCooldown--
 
@@ -106,6 +107,8 @@ new Vue({
                     text: 'The monster wanders around you without attacking. You can feel its bloodlust.'
                 })
             }
+
+            this.end()
         },
         end: function() {
             if (this.playerHP === 0 || this.monsterHP === 0) {
