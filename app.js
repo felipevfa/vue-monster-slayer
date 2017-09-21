@@ -8,7 +8,8 @@ new Vue({
             monsterHP: 100,
             battleLog: [],
             finished: false,
-            cooldown: 0
+            cooldown: 0,
+            healCooldown: 0,
         }
     },
     methods: {
@@ -59,6 +60,7 @@ new Vue({
                 text: "Your health goes up by " + heal + " points!"
             })
             
+            this.healCooldown = 3
             this.monsterMove()
         },
         reset: function() {
@@ -71,6 +73,7 @@ new Vue({
         monsterMove: function() {
             if (this.end()) return 
             if (this.cooldown > 0) this.cooldown--
+            if (this.healCooldown > 0) this.healCooldown--
 
             const willAttack = Math.floor(Math.random() * (100 - 1) + 1)
 
