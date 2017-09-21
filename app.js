@@ -105,10 +105,10 @@ new Vue({
             })
         },
         changeHealth: function(health, value) {
-            if (health - damage < 0) {
+            if (health - value < 0) {
                 health = 0
             } else {
-                health -= damage 
+                health -= value 
             }
         }
     },
