@@ -68,6 +68,7 @@ new Vue({
             this.monsterHP = 100
             this.battleLog = []
             this.cooldown = 0
+            this.healCooldown = 0
             this.finished = false
         },
         monsterMove: function() {
