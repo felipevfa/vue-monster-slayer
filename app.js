@@ -1,66 +1,44 @@
 new Vue({
     el: '#app',
     name: 'monster-slayer',
-    data: function() {
-        return {
-            appName: 'The Monster Slayer',
-            playerHP: 100,
-            monsterHP: 100,
-            battleLog: [],
-            finished: false,
-            cooldown: 0,
-            healCooldown: 0,
+    data: {
+        appName: 'The Monster Slayer',
+        playerHP: 100,
+        monsterHP: 100,
+        battleLog: [],
+        finished: false,
+        cooldown: 0,
+        healCooldown: 0,
+        type: {
+            PLAYER: 'player',
+            HEAL: 'heal',
+            MONSTER: 'monster',
         }
     },
     methods: {
         attack: function() {
-            const damage = Math.floor(Math.random() * (15 - 1) + 1)
+            const damage = this.randomize(1, 20)
 
-            if (this.monsterHP - damage < 0) {
-                this.monsterHP = 0
-            } else {
-                this.monsterHP -= damage
-            }
-
-            this.battleLog.unshift({ 
-                isPlayer: true, 
-                text: "The monster receives " + damage + " damage!" 
-            })
-
+            this.changeHealth(this.monsterHP, damage)
+            this.log(this.type.PLAYER, "The monster receives " + damage + " damage!")
             this.monsterMove()
         },
         spAttack: function() {
-            const damage = Math.floor(Math.random() * (50 - 1) + 1)
-
-            if (this.monsterHP - damage < 0) {
-                this.monsterHP = 0
-            } else {
-                this.monsterHP -= damage
-            }
-
-            this.battleLog.unshift({
-                isPlayer: true,
-                text: "The monster receives " + damage + " damage!"
-            })
-
             this.cooldown = 3
+
+            const damage = this.randomize(5, 40)
+            
+            this.changeHealth(this.monsterHP, damage)
+            this.log(this.type.PLAYER, "The monster receives " + damage + " damage!")
             this.monsterMove()
         },
         heal: function() {
-            const heal = Math.floor(Math.random() * (30 - 1) + 1)
-
-            if (this.playerHP + heal > 100) {
-                this.playerHP = 100
-            } else {
-                this.playerHP += heal
-            }
-
-            this.battleLog.unshift({
-                isHeal: true,
-                text: "Your health goes up by " + heal + " points!"
-            })
-            
             this.healCooldown = 3
+            
+            const heal = this.randomize(5, 15)
+            
+            this.changeHealth(playerHP, -heal)
+            this.log(this.type.HEAL, "Your health goes up by " + heal + " points!")
             this.monsterMove()
         },
         reset: function() {
@@ -77,35 +55,24 @@ new Vue({
             if (this.cooldown > 0) this.cooldown--
             if (this.healCooldown > 0) this.healCooldown--
 
-            const willAttack = Math.floor(Math.random() * (100 - 1) + 1)
+            const willAttack = this.randomize(0, 100)
 
             if (willAttack <= 80) {
-                const critical = Math.floor(Math.random() * (100 - 1) + 1)
-                let damage = Math.floor(Math.random() * (20 - 1) + 1)
-                let logText = ""
+                const critical = this.randomize(0, 100)
+                let damage = this.randomize(8, 20)
+                let msg = ""
 
                 if (critical <= 20) {
                     damage *= 2
-                    logText = "The monster critically wounds the player! The player receives " + damage + " damage!"
+                    msg = "The monster critically wounds the player! The player receives " + damage + " damage!"
                 } else {
-                    logText = "The player receives " + damage + " damage!"
+                    msg = "The player receives " + damage + " damage!"
                 }
 
-                if (this.playerHP - damage < 0) {
-                    this.playerHP = 0
-                } else {
-                    this.playerHP -= damage 
-                }
-
-                this.battleLog.unshift({
-                    isMonster: true,
-                    text: logText
-                })
+                this.changeHealth(this.playerHP, damage)
+                this.log(this.type.MONSTER, msg)
             } else {
-                this.battleLog.unshift({
-                    isMonster: true,
-                    text: 'The monster wanders around you without attacking. You can feel its bloodlust.'
-                })
+                this.log(this.type.MONSTER, 'The monster wanders around you without attacking. You can feel its bloodlust.')
             }
 
             this.end()
@@ -118,31 +85,39 @@ new Vue({
 
             return false
         },
+        status: function(health) {
+            if (health <= 50 && health > 25) return 'is-warning'
+            else if (health <= 25) return 'is-danger'
+            else return 'is-success'
+        },
+        logStyle: function(type) {
+            if (type === this.type.MONSTER) return 'is-danger'
+            else if (type === this.type.PLAYER) return 'is-info'
+            else return 'is-success'
+        },
+        randomize: function(min, max) {
+            return Math.floor(Math.random() * (max - min) + min)
+        },
+        log: function(type, msg) {
+            this.battleLog.unshift({
+                type: type,
+                text: msg
+            })
+        },
+        changeHealth: function(health, value) {
+            if (health - damage < 0) {
+                health = 0
+            } else {
+                health -= damage 
+            }
+        }
     },
     computed: {
-        userInDanger: function() {
-            return this.playerHP <= 50 && this.playerHP > 25
-        },
-        userAlmostDead: function() {
-            return this.playerHP <= 25
-        },
-        userIsOk: function() {
-            return !(this.userInDanger && this.userAlmostDead)
-        },
-        monsterInDanger: function() {
-            return this.monsterHP <= 50 && this.monsterHP > 25
-        },
-        monsterAlmostDead: function() {
-            return this.monsterHP <= 25
-        },
-        monsterIsOk: function() {
-            return !(this.monsterInDanger && this.monsterAlmostDead)
-        },
-        won: function() {
-            return this.monsterHP === 0 && this.finished
-        },
-        lost: function() {
-            return this.playerHP === 0 && this.finished
-        }
+       won: function() {
+           return this.monsterHP === 0 && this.finished
+       },
+       lost: function() {
+           return this.playerHP === 0 && this.finished
+       }
     }
 })

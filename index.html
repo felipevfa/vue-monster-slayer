@@ -19,14 +19,14 @@
                 <div class="column">
                     <h2 class="title has-text-centered">You</h2>
                     <progress class="progress is-large" 
-                             :class="{ 'is-primary': userIsOk, 'is-warning': userInDanger, 'is-danger': userAlmostDead }" 
+                             :class="status(playerHP)"
                              :value="playerHP" 
                               max="100">{{ playerHP }}</progress>
                 </div>
                 <div class="column">
                     <h2 class="title has-text-centered">The Monster</h2>
                     <progress class="progress is-large" 
-                             :class="{ 'is-primary': monsterIsOk, 'is-warning': monsterInDanger, 'is-danger': monsterAlmostDead }" 
+                             :class="status(monsterHP)" 
                              :value="monsterHP" 
                               max="100">{{ monsterHP }}</progress>
                 </div>
@@ -40,11 +40,11 @@
                     <button class="button is-large is-outlined fl-4" @click="reset" :disabled="finished">Give Up</button>  
                 </template>
 
-                <template v-if="finished">
+                <template v-else>
                     <p class="subtitle is-small" v-if="won">You defeated the monster!</p>
                     <p class="subtitle is-small" v-if="lost">The monster proves to be too powerful. It devours your soul and laughs as it walks away.</p>
                     
-                    <button v-if="finished" class="button start-over is-medium is-outlined" @click="reset">Start over</button>
+                    <button class="button start-over is-medium is-outlined" @click="reset">Start over</button>
                 </template>
             </div>
 
@@ -52,12 +52,9 @@
                 <h2 class="title is-size-5">Battle Log</h2>
                 <p v-if="battleLog.length == 0">There is no battle data yet.</p>
                 
-                <ul v-if="battleLog.length > 0">
+                <ul v-else>
                     <li v-for="entry in battleLog">
-                        <p class="notification" 
-                          :class="{ 'is-info': entry.isPlayer, 'is-danger': entry.isMonster, 'is-success': entry.isHeal }">
-                            {{ entry.text }}
-                        </p>
+                        <p class="notification" :class="logStyle(entry.type)"> {{ entry.text }}</p>
                     </li>
                 </ul>
             </div>
