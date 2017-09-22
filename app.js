@@ -37,7 +37,7 @@ new Vue({
             
             const heal = this.randomize(5, 15)
             
-            this.changeHealth(playerHP, -heal)
+            this.changeHealth(this.playerHP, -heal)
             this.log(this.type.HEAL, "Your health goes up by " + heal + " points!")
             this.monsterMove()
         },
@@ -107,8 +107,10 @@ new Vue({
         changeHealth: function(health, value) {
             if (health - value < 0) {
                 health = 0
+            } else if (health - value > 100) {
+                health = 100
             } else {
-                health -= value 
+                health -= value
             }
         }
     },
